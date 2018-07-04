@@ -1,2 +1,2 @@
 # DataStructuresLinq
-Console application for work with data structures
+Console application for work with data structures and Linq
