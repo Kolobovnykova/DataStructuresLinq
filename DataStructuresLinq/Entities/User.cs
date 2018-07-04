@@ -22,6 +22,16 @@ namespace DataStructuresLinq.Entities
             Todos = new List<TodoDTO>(todos);
         }
 
+        public User(User user, IEnumerable<TodoDTO> todos)
+        {
+            Id = user.Id;
+            CreatedAt = user.CreatedAt;
+            Name = user.Name;
+            Email = user.Email;
+            Avatar = user.Avatar;
+            Todos = new List<TodoDTO>(todos);
+        }
+
         public List<PostDTO> Posts { get; set; }
         public List<TodoDTO> Todos { get; set; }
         public List<CommentDTO> Comments { get; set; }
