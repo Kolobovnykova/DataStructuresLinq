@@ -17,8 +17,8 @@ namespace DataStructuresLinq
                                     "\n '2' - get number of comments under posts with length more than 50 of a particular user" +
                                     "\n '3' - get number of complete todos of a particular user" +
                                     "\n '4' - get a set of sorted users with todos" +
-                                    "\n '5' - " +
-                                    "\n '6' - " +
+                                    "\n '5' - get user structure by id" +
+                                    "\n '6' - get post structure by id" +
                                     "\n 'Esc' - press escape to exit application \n";
 
         public Menu()
@@ -52,8 +52,10 @@ namespace DataStructuresLinq
                         GetSortedUsersWithTodos();
                         break;
                     case ConsoleKey.D5:
+                        GetUserStructureById();
                         break;
                     case ConsoleKey.D6:
+                        GetPostStructureById();
                         break;
                     case ConsoleKey.D7:
                         PrintAllUsers();
@@ -63,6 +65,38 @@ namespace DataStructuresLinq
                 Console.WriteLine("Press any key to continue.");
                 Console.ReadKey();
             } while (enteredKey.Key != ConsoleKey.Escape);
+        }
+
+        private void GetPostStructureById()
+        {
+            Console.Clear();
+            Console.WriteLine("Get a structure of post.\nEnter the id:");
+            try
+            {
+                var postId = int.Parse(Console.ReadLine());
+                var postStructure = requestService.GetPostStructureById(postId);
+                requestService.PrintPostStructureById(postStructure, postId);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input.");
+            }
+        }
+
+        private void GetUserStructureById()
+        {
+            Console.Clear();
+            Console.WriteLine("Get a structure of user.\nEnter the id:");
+            try
+            {
+                var userId = int.Parse(Console.ReadLine());
+                var userStructure = requestService.GetUserStructureById(userId);
+                requestService.PrintUserStructureById(userStructure, userId);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input.");
+            }
         }
 
         private void GetSortedUsersWithTodos()

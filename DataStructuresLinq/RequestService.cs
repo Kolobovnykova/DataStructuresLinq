@@ -102,7 +102,7 @@ namespace DataStructuresLinq
         public void PrintSortedUsersWithTodos(IEnumerable<User> users)
         {
             Console.Clear();
-            Console.WriteLine("Get sorted.");
+            Console.WriteLine("Get sorted list of users with sorted todos in descending order.");
             if (users == null)
             {
                 Console.WriteLine("Users were not found.");
@@ -118,6 +118,60 @@ namespace DataStructuresLinq
                     Console.WriteLine($"\t{todo}");
                 }
             }
+        }
+
+        public (User user, PostDTO lastPost, int? commentsAmount, int incompleteTodosAmount, PostDTO bestPostLength, PostDTO bestPostLikes) GetUserStructureById(int userId)
+        {
+            var userStructure = (from user in users
+                                 where user.Id == userId
+                                 select (user,
+                                         user.Posts.OrderBy(x => x.Title).LastOrDefault(),
+                                         user.Posts.OrderBy(x => x.Title).LastOrDefault()?.Comments.Count,
+                                         user.Todos.Count(x => !x.IsComplete),
+                                         user.Posts.OrderByDescending(x => x.Comments.Count(y => y.Body.Length > 80)).FirstOrDefault(),
+                                         user.Posts.OrderByDescending(x => x.Likes).FirstOrDefault()))
+                .FirstOrDefault();
+
+            return userStructure;
+        }
+
+        public void PrintUserStructureById((User user, PostDTO lastPost, int? commentsAmount, int incompleteTodosAmount, PostDTO bestPostLength, PostDTO bestPostLikes) userStructure, int userId)
+        {
+            Console.Clear();
+            Console.WriteLine("Get a structure of a user by id.");
+
+            Console.WriteLine($"User id: \n{userId}");
+            Console.WriteLine($"User: \n{userStructure.user}");
+            Console.WriteLine($"Last post: \n{userStructure.lastPost}");
+            Console.WriteLine($"Number of comments under last post: \n{userStructure.commentsAmount}");
+            Console.WriteLine($"Number of incomplete todos: \n{userStructure.incompleteTodosAmount}");
+            Console.WriteLine($"Best post with most comments with length 80+ symbols: \n{userStructure.bestPostLength}");
+            Console.WriteLine($"Best post with likes: \n{userStructure.bestPostLikes}");
+        }
+
+        public (PostDTO post, CommentDTO longestComment, CommentDTO luckyComment, int unluckyComments) GetPostStructureById(int postId)
+        {
+            var postStructure = (from user in users
+                                 from post in user.Posts
+                                 where post.Id == postId
+                                 select (post,
+                                         post.Comments.OrderByDescending(x => x.Body.Length).FirstOrDefault(),
+                                         post.Comments.OrderByDescending(x => x.Likes).FirstOrDefault(),
+                                         post.Comments.Count(x => x.Likes == 0 || x.Body.Length < 80))).FirstOrDefault();
+
+            return postStructure;
+        }
+
+        public void PrintPostStructureById((PostDTO post, CommentDTO longestComment, CommentDTO luckyComment, int unluckyComments) postStructure, int postId)
+        {
+            Console.Clear();
+            Console.WriteLine("Get a structure of a post by id.");
+
+            Console.WriteLine($"Post id: \n{postId}");
+            Console.WriteLine($"Post: \n{postStructure.post}");
+            Console.WriteLine($"Longest comment: \n{postStructure.longestComment}");
+            Console.WriteLine($"A comment with most likes: \n{postStructure.luckyComment}");
+            Console.WriteLine($"Number of comments with 0 likes or <80 symbols: \n{postStructure.unluckyComments}");
         }
 
         public void PrintAllUsers()
