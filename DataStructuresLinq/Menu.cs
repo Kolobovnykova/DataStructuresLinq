@@ -167,10 +167,10 @@ namespace DataStructuresLinq
             requestService.PrintAllUsers();
         }
 
-        private static async Task<(List<UserDTO> usersData, List<PostDTO> postsData, List<CommentDTO> commentsData, List<TodoDTO> todosData)> GetDataFromServer()
+        private static async Task<(List<User> usersData, List<PostDTO> postsData, List<CommentDTO> commentsData, List<TodoDTO> todosData)> GetDataFromServer()
         {
             string responseBody = await client.GetStringAsync("users");
-            var usersData = JsonConvert.DeserializeObject<List<UserDTO>>(responseBody);
+            var usersData = JsonConvert.DeserializeObject<List<User>>(responseBody);
 
             responseBody = await client.GetStringAsync("posts");
             var postsData = JsonConvert.DeserializeObject<List<PostDTO>>(responseBody);
@@ -183,7 +183,7 @@ namespace DataStructuresLinq
             return (usersData, postsData, commentsData, todosData);
         }
 
-        private static IEnumerable<User> GetCollection((List<UserDTO> usersData, List<PostDTO> postsData, List<CommentDTO> commentsData, List<TodoDTO> todosData) dataFromServer)
+        private static IEnumerable<User> GetCollection((List<User> usersData, List<PostDTO> postsData, List<CommentDTO> commentsData, List<TodoDTO> todosData) dataFromServer)
         {
             var users = from user in dataFromServer.usersData
                         join post in (from p in dataFromServer.postsData

@@ -11,7 +11,9 @@ namespace DataStructuresLinq.Entities
         public string Avatar { get; set; }
         public string Email { get; set; }
 
-        public User(UserDTO user, IEnumerable<PostDTO> posts, IEnumerable<TodoDTO> todos)
+        public User() {}
+
+        public User(User user, IEnumerable<PostDTO> posts, IEnumerable<TodoDTO> todos)
         {
             Id = user.Id;
             CreatedAt = user.CreatedAt;
